@@ -428,55 +428,67 @@
                     }
                 },
                 onClick: (e) => {
-                    var canvasPosition = Chart.helpers.getRelativePosition(e, myChart);
+                    if(typeVocal=="tonale" || typeVocal=="vocale"){
+                        if(typeOreille=="oreilleDroite" ||typeOreille=="oreilleGauche" || typeOreille=="droiteGauche" ){
+                            if(className=="ca" || className=="co" || className=="inconfort" || className=="confort" || className=="coMasting" || className=="caMasting"){
+                                var canvasPosition = Chart.helpers.getRelativePosition(e, myChart);
 
-                    // Substitute the appropriate scale IDs
-                    var dataX = myChart.scales.x.getValueForPixel(canvasPosition.x);
-                    //dataX=dataX*10;
-                    var dataY = myChart.scales.y.getValueForPixel(canvasPosition.y);
-                    dataY= Math.round(dataY);
-                    var dataYc=dataY.toString();
-                    var lastC=dataYc.substring(dataYc.length,dataYc.length-1);
-                    if(lastC!='0'){
-                        dataYc=(Math.round(dataY)+1).toString();
-                        var lastC=dataYc.substring(dataYc.length,dataYc.length-1);
-                        if(lastC!='0'){
-                            dataY++
+                                // Substitute the appropriate scale IDs
+                                var dataX = myChart.scales.x.getValueForPixel(canvasPosition.x);
+                                //dataX=dataX*10;
+                                var dataY = myChart.scales.y.getValueForPixel(canvasPosition.y);
+                                dataY= Math.round(dataY);
+                                var dataYc=dataY.toString();
+                                var lastC=dataYc.substring(dataYc.length,dataYc.length-1);
+                                if(lastC!='0'){
+                                    dataYc=(Math.round(dataY)+1).toString();
+                                    var lastC=dataYc.substring(dataYc.length,dataYc.length-1);
+                                    if(lastC!='0'){
+                                        dataY++
+                                    }else{
+                                        dataY++;
+                                    }
+                                }
+                                $('#fin').hide();
+                                $('#debut').hide();
+                                $('#debuter').show();
+                                if(className=='ca'){
+                                    dataCA.push({x:dataX,y:dataY});
+                                    datas.datasets.push({data: dataCA,borderColor:'red',fill:true,pointStyle:'circle',pointRadius:6,type:'line'});
+                                }else if(className=='co'){
+                                    dataC0.push({x:dataX,y:dataY});
+                                    datas.datasets.push({data: dataC0,borderColor:'red',fill:true,pointStyle:'dash',pointRadius:6,type:'line'});
+                                }else if(className=='inconfort'){
+                                    dataIncofort.push({x:dataX,y:dataY});
+                                    datas.datasets.push({data: dataIncofort,borderColor:'red',fill:true,pointStyle:'crossRot',pointRadius:6,type:'line'});
+                                }else if(className=='confort'){
+                                    dataConfort.push({x:dataX,y:dataY});
+                                    datas.datasets.push({data: dataConfort,borderColor:'red',fill:true,pointStyle:'square',pointRadius:6,type:'line'});
+                                }else if(className=='caMasting'){
+                                    dataCAMasting.push({x:dataX,y:dataY});
+                                    datas.datasets.push({data: dataCAMasting,borderColor:'red',fill:true,pointStyle:'triangle',pointRadius:6,type:'line'});
+                                }else if(className=='coMasting'){
+                                    dataCOMasting.push({x:dataX,y:dataY});
+                                    datas.datasets.push({data: dataCOMasting,borderColor:'red',fill:true,pointStyle:'star',pointRadius:6,type:'line'});
+                                }
+                                console.log(datas.datasets);
+                                //Suppression et creation d'un canevas
+                                $('#myCharte').remove();
+                                $('#debuter').append('<canvas width="420" height="600" style="margin: 4%" id="myCharte"><canvas>');
+                                let essaie=document.getElementById('myCharte').getContext('2d');
+                                let myChartr = new Chart(
+                                    document.getElementById('myCharte'),
+                                    configs,
+                                );
+                            }else{
+                                alert("Veuillez choisir d'abord un seuil(seuil CA ou seuil CO ou seuil Inconfort,...)");
+                            }
                         }else{
-                            dataY++;
+                            alert("Veuillez choisir d'abord une oreille(droite ou gauche ou droite et gauche)");
                         }
+                    }else{
+                        alert("Veuillez choisir d'abord un type d'audiometrie(tonale ou vocale)");
                     }
-                    $('#fin').hide();
-                    $('#debut').hide();
-                    $('#debuter').show();
-                    if(className=='ca'){
-                        dataCA.push({x:dataX,y:dataY});
-                        datas.datasets.push({data: dataCA,borderColor:'red',fill:true,pointStyle:'circle',pointRadius:6,type:'line'});
-                    }else if(className=='co'){
-                        dataC0.push({x:dataX,y:dataY});
-                        datas.datasets.push({data: dataC0,borderColor:'red',fill:true,pointStyle:'dash',pointRadius:6,type:'line'});
-                    }else if(className=='inconfort'){
-                        dataIncofort.push({x:dataX,y:dataY});
-                        datas.datasets.push({data: dataIncofort,borderColor:'red',fill:true,pointStyle:'crossRot',pointRadius:6,type:'line'});
-                    }else if(className=='confort'){
-                        dataConfort.push({x:dataX,y:dataY});
-                        datas.datasets.push({data: dataConfort,borderColor:'red',fill:true,pointStyle:'square',pointRadius:6,type:'line'});
-                    }else if(className=='caMasting'){
-                        dataCAMasting.push({x:dataX,y:dataY});
-                        datas.datasets.push({data: dataCAMasting,borderColor:'red',fill:true,pointStyle:'triangle',pointRadius:6,type:'line'});
-                    }else if(className=='coMasting'){
-                        dataCOMasting.push({x:dataX,y:dataY});
-                        datas.datasets.push({data: dataCOMasting,borderColor:'red',fill:true,pointStyle:'star',pointRadius:6,type:'line'});
-                    }
-                    console.log(datas.datasets);
-                    //Suppression et creation d'un canevas
-                    $('#myCharte').remove();
-                    $('#debuter').append('<canvas width="420" height="600" style="margin: 4%" id="myCharte"><canvas>');
-                    let essaie=document.getElementById('myCharte').getContext('2d');
-                    let myChartr = new Chart(
-                        document.getElementById('myCharte'),
-                        configs,
-                    );
                 }
             },
         };
