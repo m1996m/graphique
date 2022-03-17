@@ -1,0 +1,575 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Audiometrie{% endblock %}
+
+{% block body %}
+    <style>
+
+        .buttonuse {
+            width: 120px;
+            height: 35px;
+            border-radius: 27px;
+            background: white;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.12);
+            border: none;
+            font-family:Fira Sans;
+            font-weight: 300;
+            border: 1px solid black;
+            padding: 0.3%;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <div class="row" style="background: #F5FFFA">
+        <div class="col-md-2" style="color: black;padding-bottom: 70%;text-align: left;background: #F5F5F5;border:1px solid black">
+            <h4 style="text-decoration: 1px dotted;padding-bottom: 4%;text-align: center">Audiométrie</h4>
+            <h6 class="tonale" style="padding-bottom: 4%;text-align: center" id="tonale">Audiometrie tonale</h6>
+            <h6 class="vocale" style="padding-bottom: 4%;text-align: center" id="vocale">Audiometrie vocale</h6>
+        </div>
+        <div class="col-md-10" style="background: #F5FFFA">
+            <form action="POST">
+                <div class="row">
+                    <div class="col-md-3" style="color: black;text-align: left;">
+                        <h6 >Audiométrie Vocale</h6>
+                    </div>
+                    <div class="col-md-2" style="margin-top: 1%">
+                        <label for="patient">Patient</label>
+                        <select name="patient" id="patient" >
+                            <option value="">Malick</option>
+                        </select>
+                    </div>
+                    <div class="col-md-7" style="color: black;text-align: right;margin-top: 1%">
+                        <i class="fa fa-bell" aria-hidden="true" style="font-size:  20px"></i>
+                        <i class="fa fa-cog" aria-hidden="true" style="font-size:  20px"></i>
+                        <i class="fa fa-save" aria-hidden="true" style="font-size:  20px"></i>
+                        <i class="fa fa-print" aria-hidden="true" style="font-size:  20px"></i>
+                    </div>
+                </div>
+                <section class="boutton">
+                    <div class="row">
+                        <div class="col-md-12" style="color: black;text-align: center;margin-left: 7%">
+                            <a  id="oreilleDroite" class="buttonuse droite" style="color: red;">Oreille Droite</a>
+                            <a id="droiteGauche" class="buttonuse droiteGauche" style="color: red;"> <b id="droite">Droite</b> <b id="et" style="color: black">et</b>  <b id="gauche" style="color: blue">Gauche</b></a>
+                            <a id="oreilleGauche" class="buttonuse gauche" style="color: blue;">Oreille Gauche</a>
+                        </div>
+                        <i class="fas fa-infinity" style="font-size: 28px;margin-left: 55%"></i>
+                    </div>
+                </section>
+                <section class="tab-left" >
+                    <div class="row" style="margin-top: 0%">
+                        <div class="col-md-3" style="color: black;text-align: left;font-family: arial;font-size: 10px;">
+                            <div class="legend" style="border: 1px solid black;border-radius: 8%;margin: 1%;margin-bottom: 4%">
+                                <p   style="border-bottom: 2px dotted;margin: 2%;">
+                                    <b class="ca">Seuil CA</b> <b class="ca" style="font-size:  12px;margin-left: 56%;color: red">O</b><b class="ca" style="font-size:  12px;color: blue;margin-left: 3%">X</b>
+                                    <i id="ca" class="fa fa-eye" aria-hidden="true" style="font-size:  12px;margin-left: 4%"></i>
+                                </p>
+                                <p style="border-bottom: 2px dotted;margin: 2%">
+                                    <b class="co">Seuil C0</b><b class="co" style="font-size:  12px;margin-left: 59%;color: red">></b><b class="co" style="font-size:  12px;color: blue;margin-left: 3%"><</b>
+                                    <i id="co" class="fa fa-eye" aria-hidden="true" style="font-size:  12px;margin-left: 4%"></i>
+                                </p>
+                                <p  style="border-bottom: 2px dotted;margin: 2%">
+                                    <b class="inconfort">Seuil Inconfort</b> <b class="inconfort" style="font-size:  12px;margin-left: 44%;color: red">U</b><b class="inconfort" style="font-size:  12px;color: blue;margin-left: 3%">U</b>
+                                    <i id="inconfort" class="fa fa-eye" aria-hidden="true" style="font-size:  12px;margin-left: 4%"></i>
+                                </p>
+                                <p  style="border-bottom: 2px dotted;margin: 2%">
+                                    <b class="confort">Seuil Confort</b> <b class="confort" style="font-size:  12px;margin-left: 46%;color: red">M</b><b class="confort" style="font-size:  12px;color: blue;margin-left: 3%">M</b>
+                                    <i id="confort" class="fa fa-eye" aria-hidden="true" style="font-size:  12px;margin-left: 4%"></i>
+                                </p>
+                                <p style="border-bottom:2px dotted;margin: 2%">
+                                    <b class="caMasting">Seuil CA+ masking</b> <b class="caMasting" style="font-size:  12px;margin-left: 42%"><i class="fa-light fa-triangle" aria-hidden="true" style="font-size:  12px;color: red"></i></b><b class="caMasting"><i class="far fa-square" aria-hidden="true" style="font-size:  12px;color: blue"></i></b>
+                                    <i id="caMasting" class="fa fa-eye" aria-hidden="true" style="font-size:  12px;margin-left: 4%"></i>
+                                </p>
+                                <p  style="margin: 2%">
+                                    <b class="coMasting">Seuil CO+ masking</b> <b class="coMasting" style="font-size:  12px;margin-left: 40%;color: red">[</b><b class="coMasting" style="font-size:  12px;color: blue;margin-left: 3%">]</b>
+                                    <i id="coMasting" class="fa fa-eye" aria-hidden="true" style="font-size:  12px;margin-left: 4%"></i>
+                                </p>
+                            </div>
+
+                            <div class="moyenne" >
+                                <table class="table table-bordered" style="border-radius: 10%;" >
+                                    <thead >
+                                        <tr style="">
+                                            <th >Oreille</th>
+                                            <th style="margin-top: 1%">Moyenne CO</th>
+                                            <th style="margin-top: 1%">Moyenne CA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Droite</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gauche</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="complement" style="border: 1px solid black;border-radius: 8%;margin-bottom: 4%">
+                                <p style="border-bottom: 1px dotted; margin: 3%">Compléments</p>
+                                <input style=" margin: 3%" type="checkbox" name="Bananevocale" id="Bananevocale"><label style="margin-left: 4%" for="Bananevocale">Banane vocale</label><br>
+                                <input style=" margin: 3%"  type="checkbox" name="Lettrevocale" id="Lettrevocale"><label style="margin-left: 4%" for="Lettrevocale">Lettres vocales</label><br>
+                                <input style=" margin: 3%"  type="checkbox" name="Sonsenvironnement" id="Sonsenvironnement"><label style="margin-left: 4%" for="Sonsenvironnement">Sons environnement</label><br>
+                                <input style=" margin: 3%"  type="checkbox" name="Niveausurdité" id="Niveausurdité"><label style="margin-left: 4%" for="Niveausurdité">Niveau de surdité</label>
+                            </div>
+                            <div class="historique" style="border: 1px solid black;border-radius: 3%;">
+                                <h6 style="margin: 3%">Historique</h6>
+                            </div>
+                        </div>
+                        <div class="col-md-9" style="color: black;margin-top: 1%">
+                            <div class="row">
+                                <div id="debut" class="col-md-5" style="border: 1px solid black;border-radius: 7%;margin-right: 1%">
+                                    <canvas id="myChart" width="420" height="600" style="margin: 4%"></canvas>
+                                    <table hidden style="font-size: 6px;width: 80%" class="table table-bordered">
+                                        <tr>
+                                            <td>Fréquence (Hz)</td>
+                                            <td>125</td>
+                                            <td>250</td>
+                                            <td>500</td>
+                                            <td>750</td>
+                                            <td>1K</td>
+                                            <td>2k</td>
+                                            <td>3k</td>
+                                            <td>5k</td>
+                                            <td>6k</td>
+                                            <td>7k</td>
+                                            <td>8k</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Seuil CA (dbLH)</td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div id="debuter" class="col-md-5" style="border: 1px solid black;border-radius: 7%;margin-right: 1%">
+                                    <canvas id="myCharte" width="420" height="600" style="margin: 4%"></canvas>
+                                    <table hidden style="font-size: 6px;width: 80%" class="table table-bordered">
+                                        <tr>
+                                            <td>Fréquence (Hz)</td>
+                                            <td>125</td>
+                                            <td>250</td>
+                                            <td>500</td>
+                                            <td>750</td>
+                                            <td>1K</td>
+                                            <td>2k</td>
+                                            <td>3k</td>
+                                            <td>5k</td>
+                                            <td>6k</td>
+                                            <td>7k</td>
+                                            <td>8k</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Seuil CA (dbLH)</td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div id="fin" class="col-md-5" style="border: 1px solid black;border-radius: 7%;margin-right: 1%">
+                                    <canvas id="myCharts" width="420" height="600" style="margin: 4%"></canvas>
+                                    <table style="font-size: 6px;width: 80%" class="table table-bordered">
+                                        <tr>
+                                            <td>Fréquence (Hz)</td>
+                                            <td>125</td>
+                                            <td>250</td>
+                                            <td>500</td>
+                                            <td>750</td>
+                                            <td>1K</td>
+                                            <td>2k</td>
+                                            <td>3k</td>
+                                            <td>5k</td>
+                                            <td>6k</td>
+                                            <td>7k</td>
+                                            <td>8k</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Seuil CA (dbLH)</td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-5" style="border: 1px solid black;border-radius: 7%;">
+                                    <canvas id="oreille" width="420" height="600" style="margin: 4%"></canvas>
+                                    <table hidden style="font-size: 6px;width: 80%" class="table table-bordered">
+                                        <tr>
+                                            <td>Fréquence (Hz)</td>
+                                            <td>125</td>
+                                            <td>250</td>
+                                            <td>500</td>
+                                            <td>750</td>
+                                            <td>1K</td>
+                                            <td>2k</td>
+                                            <td>3k</td>
+                                            <td>5k</td>
+                                            <td>6k</td>
+                                            <td>7k</td>
+                                            <td>8k</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Seuil CA (dbLH)</td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 120%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                            <td><input style="width: 150%;height: 1%" type="text"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-8">
+                        <label for="commentaire">Commentaire</label>
+                        <textarea style="border-radius: 4%"  name="" id="commentaire" cols="30" rows="3" class="form-control"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const actions = [
+            {
+                name: 'Toggle Tooltip Point Style',
+                handler(chart) {
+                    chart.options.plugins.tooltip.usePointStyle = !chart.options.plugins.tooltip.usePointStyle;
+                    chart.update();
+                }
+            },
+        ];
+        //Declaration des variables
+        var DATA_COUNT = 12;
+        var datapointsDroite = [];
+        var datapoints = [];
+        var datapointsGauche = [];
+        var datapointsDroiteGauhe = [];
+        var dataCA = [];
+        var dataC0 = [];
+        var dataIncofort = [];
+        var dataConfort = [];
+        var dataCAMasting = [];
+        var dataCOMasting = [];
+        var idName="";
+        var typeOreille="";
+        var className="";
+        const labels=['125','250','500','750','1k','2k','3k','4k','5k','6k','7k','8k'];
+        const data = {
+            labels: labels,
+            datasets: [
+            ]
+        };
+        var typeVocal="";
+
+        const config = {
+            type: 'scatter',
+            ticks: {
+                autoSkip: true,
+                maxTicksLimit: 12
+            },
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: ''
+                    },
+                    legend: {
+                        display: false
+                    },
+                },
+                interaction: {
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Fréquence (Hz)'
+                        },
+                        suggestedMin: 1,
+                        suggestedMax: 8
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Intensité(dbLH)'
+                        },
+                        suggestedMin: -10,
+                        suggestedMax: 120
+                    }
+                },
+                onClick: (e) => {
+                    $("#fin").hide();
+                    $("#debuter").show();
+                    const canvasPosition = Chart.helpers.getRelativePosition(e, myChart);
+
+                    // Substitute the appropriate scale IDs
+                    var dataX = myChart.scales.x.getValueForPixel(canvasPosition.x);
+                    dataX=dataX*10;
+                    var dataY = myChart.scales.y.getValueForPixel(canvasPosition.y);
+                    dataY= Math.round(dataY);
+                    var dataYc=dataY.toString();
+                    var lastC=dataYc.substring(dataYc.length,dataYc.length-1);
+                    if(lastC!='0'){
+                        dataYc=(Math.round(dataY)+1).toString();
+                        var lastC=dataYc.substring(dataYc.length,dataYc.length-1);
+                        if(lastC!='0'){
+                            dataY++
+                        }else{
+                            dataY++;
+                        }
+                    }
+                    if(className=='ca'){
+                        dataCA.push({x:dataX,y:dataY});
+                    }else if(className=='co'){
+                        dataC0.push({x:dataX,y:dataY});
+                    }else if(className=='inconfort'){
+                        dataIncofort.push({x:dataX,y:dataY});
+                    }else if(className=='confort'){
+                        dataConfort.push({x:dataX,y:dataY});
+                    }else if(className=='caMasting'){
+                        dataCAMasting.push({x:dataX,y:dataY});
+                    }else if(className=='coMasting'){
+                        dataCOMasting.push({x:dataX,y:dataY});
+                    }
+                    console.log(dataCA);
+                    console.log(dataConfort);
+                }
+            },
+        };
+        //Par defaut
+        const datas = {
+            labels: labels,
+            datasets: [
+            ]
+        };
+        const configs = {
+            type: 'scatter',
+            ticks: {
+                autoSkip: true,
+                maxTicksLimit: 12
+            },
+            data: datas,
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: ''
+                    },
+                    legend: {
+                        display: false
+                    },
+                },
+                interaction: {
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Fréquence (Hz)'
+                        },
+                        suggestedMin: 1,
+                        suggestedMax: 8
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Intensité(dbLH)'
+                        },
+                        suggestedMin: -10,
+                        suggestedMax: 120
+                    }
+                },
+                onClick: (e) => {
+                    var canvasPosition = Chart.helpers.getRelativePosition(e, myChart);
+
+                    // Substitute the appropriate scale IDs
+                    var dataX = myChart.scales.x.getValueForPixel(canvasPosition.x);
+                    //dataX=dataX*10;
+                    var dataY = myChart.scales.y.getValueForPixel(canvasPosition.y);
+                    dataY= Math.round(dataY);
+                    var dataYc=dataY.toString();
+                    var lastC=dataYc.substring(dataYc.length,dataYc.length-1);
+                    if(lastC!='0'){
+                        dataYc=(Math.round(dataY)+1).toString();
+                        var lastC=dataYc.substring(dataYc.length,dataYc.length-1);
+                        if(lastC!='0'){
+                            dataY++
+                        }else{
+                            dataY++;
+                        }
+                    }
+                    $('#fin').hide();
+                    $('#debut').hide();
+                    $('#debuter').show();
+                    if(className=='ca'){
+                        dataCA.push({x:dataX,y:dataY});
+                        datas.datasets.push({data: dataCA,borderColor:'red',fill:true,pointStyle:'circle',pointRadius:6,type:'line'});
+                    }else if(className=='co'){
+                        dataC0.push({x:dataX,y:dataY});
+                        datas.datasets.push({data: dataC0,borderColor:'red',fill:true,pointStyle:'dash',pointRadius:6,type:'line'});
+                    }else if(className=='inconfort'){
+                        dataIncofort.push({x:dataX,y:dataY});
+                        datas.datasets.push({data: dataIncofort,borderColor:'red',fill:true,pointStyle:'crossRot',pointRadius:6,type:'line'});
+                    }else if(className=='confort'){
+                        dataConfort.push({x:dataX,y:dataY});
+                        datas.datasets.push({data: dataConfort,borderColor:'red',fill:true,pointStyle:'square',pointRadius:6,type:'line'});
+                    }else if(className=='caMasting'){
+                        dataCAMasting.push({x:dataX,y:dataY});
+                        datas.datasets.push({data: dataCAMasting,borderColor:'red',fill:true,pointStyle:'triangle',pointRadius:6,type:'line'});
+                    }else if(className=='coMasting'){
+                        dataCOMasting.push({x:dataX,y:dataY});
+                        datas.datasets.push({data: dataCOMasting,borderColor:'red',fill:true,pointStyle:'star',pointRadius:6,type:'line'});
+                    }
+                    console.log(datas.datasets);
+                    //Suppression et creation d'un canevas
+                    $('#myCharte').remove();
+                    $('#debuter').append('<canvas width="420" height="600" style="margin: 4%" id="myCharte"><canvas>');
+                    let essaie=document.getElementById('myCharte').getContext('2d');
+                    let myChartr = new Chart(
+                        document.getElementById('myCharte'),
+                        configs,
+                    );
+                }
+            },
+        };
+        //Par defaut
+        let essai=document.getElementById('myChart').getContext('2d');
+        let myChart = new Chart(
+            document.getElementById('myChart'),
+            configs,
+        );
+        let oreille=document.getElementById('oreille').getContext('2d');
+        let oreillle = new Chart(
+            document.getElementById('oreille'),
+            config
+        );
+        let essaie=document.getElementById('myCharte').getContext('2d');
+        let myChartr = new Chart(
+            document.getElementById('myCharte'),
+            configs,
+        );
+        $(document).ready(function(){
+            $("#fin").hide();
+            $("#debuter").hide();
+            $('p').click((e)=>{
+                className=e.target.className
+            });
+            $('i').click((e)=>{
+                $('#debut').hide();
+                idName= e.target.id;
+                if(idName=='ca'){
+                    data.datasets.push({data: dataCA,borderColor:'red',fill:true,pointStyle:'circle',pointRadius:6,type:'line'});
+                }else if(idName=='co'){
+                    data.datasets.push({data: dataC0,borderColor:'red',fill:true,pointStyle:'triangle',pointRadius:6,type:'line'});
+                }else if(idName=='inconfor'){
+                    data.datasets.push({data: dataIncofort,borderColor:'red',fill:true,pointStyle:'crossRot',pointRadius:6,type:'line'});
+                }else if(idName=='confort'){
+                    data.datasets.push({data: dataConfort,borderColor:'red',fill:true,pointStyle:'square',pointRadius:6,type:'line'});
+                }else if(idName=='caMasting'){
+                    data.datasets.push({data: dataCAMasting,borderColor:'red',fill:true,pointStyle:'triangle',pointRadius:6,type:'line'});
+                }else if(idName=='coMasting'){
+                    data.datasets.push({data: dataCOMasting,borderColor:'red',fill:true,pointStyle:'star',pointRadius:6,type:'line'})
+                }
+                //console.log(datapointsDroite);
+                $("#fin").show();
+                $("#debuter").hide();
+                $('#myCharts').remove();
+                $('#fin').append('<canvas width="420" height="600" style="margin: 4%" id="myCharts"><canvas>');
+                let essais=document.getElementById('myCharts').getContext('2d');
+                let myCharts = new Chart(
+                    document.getElementById('myCharts'),
+                    config,
+                );
+            });
+            //Verification de type de vocal
+            $("#vocale").click(()=>{
+                //alert("bonjour");
+                typeVocal="vocale";
+                $("#vocale").css({"background-color": "white", "font-weight": "bolder","border":"1px solid black"});
+                $("#tonale").css({"background-color":"#F5F5F5","border":"none"});
+            });
+            $("#tonale").click(()=>{
+                typeVocal="tonale";
+                $("#tonale").css({"background-color": "white", "font-weight": "bolder","border":"1px solid black"});
+                $("#vocale").css({"background-color":"#F5F5F5","border":"none"});
+            });
+            $("#oreilleDroite").click(()=>{
+                typeOreille="oreilleDroite"
+                $("#oreilleDroite").css({"background-color": "green","color":"white"});
+                $("#oreilleGauche").css({"background-color":"white","color":"blue"});
+                $("#droite").css({"background-color":"white","color":"red"});
+                $("#gauche").css({"background-color":"white","border":"black"});
+                $("#et").css({"background-color":"white","border":"blue"});
+                $("#droiteGauche").css({"background-color": "white"});
+            });
+            $("#oreilleGauche").click(()=>{
+                typeOreille="oreilleGauche"
+                $("#oreilleGauche").css({"background-color": "green","color":"white"});
+                $("#oreilleDroite").css({"background-color":"white","color":"red"});
+                $("#droite").css({"background-color":"white","color":"red"});
+                $("#gauche").css({"background-color":"white","color":"blue"});
+                $("#et").css({"background-color":"white","color":"black"});
+                $("#droiteGauche").css({"background-color": "white"});
+            });
+            $("#droiteGauche").click(()=>{
+                typeOreille="droiteGauche"
+                $("#droiteGauche").css({"background-color": "green","color":"white"});
+                $("#droite").css({"background-color":"green","color":"white"});
+                $("#gauche").css({"background-color":"green","color":"white"});
+                $("#et").css({"background-color":"green","color":"white"});
+                $("#oreilleDroite").css({"background-color":"white","color":"red"});
+                $("#oreilleGauche").css({"background-color":"white","color":"blue"});
+            });
+        });
+
+
+    </script>
+{% endblock %}

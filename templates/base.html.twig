@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" referrerpolicy="no-referrer" />
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+            <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="w3-row" style="background: #4682B4;color: white;padding: 1%" >
+            <div class="w3-col w3-container m2 l2" >
+                <select name="" id="">
+                    <option value="">Gybson GUILi</option>
+                    <option value="">Gybson GUILi</option>
+                </select>
+            </div>
+             
+            <div class="w3-col w3-container m1 l1" style="text-decoration: none;margin-left:0.5%">
+                <a href="#" style="text-decoration: none;color: white;">Agenda</a>
+            </div>
+            <div class="w3-col w3-container m1 l1">
+                <select name="" id="" style="border: 1px solid white">
+                    <option value="">Note</option>
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                    <option value="">4</option>
+                    <option value="">5</option>
+                    <option value="">6</option>
+                    <option value="">9</option>
+                </select>
+            </div>
+            <div class="w3-col w3-container m3 l3">
+
+            </div>
+            <div class="w3-col w3-container m2 l2" style="text-align: right">
+                <input type="text" placeholder="rechercher un patient">
+            </div>
+            <div class="w3-col w3-container m2 l2" style="text-align: right">
+                <i class="fa fa-bell" aria-hidden="true"></i>
+                <i class="fa fa-question" aria-hidden="true"></i>
+                <i class="fa fa-power-off" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="w3-row">
+                <div class="w3-col  m12 l12">
+                    {% block body %}{% endblock %}
+                </div>
+            </div>
+    </body>
+</html>
